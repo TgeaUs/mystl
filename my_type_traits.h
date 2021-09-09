@@ -91,6 +91,8 @@ namespace MyType_traits
 	};
 	template <bool Val>
 	using bool_constant = intergral_constant<bool, Val>;
+	using true_type = bool_constant<true>;
+	using false_type = bool_constant<false>;
 
 	template <typename Ty>
 	struct remove_cv
@@ -104,13 +106,32 @@ namespace MyType_traits
 	constexpr bool is_same_v = false;
 	template <typename Ty>
 	constexpr bool is_same_v<Ty, Ty> = true;
+	template <typename Ty1, typename Ty2>
+	constexpr bool is_same = bool_constant<is_same_v<Ty1, Ty2>>{};
 
 	template <typename Ty>
-	constexpr bool is_void_aux = is_same_v<remove_cv_t<Ty>, void>;
+	constexpr bool is_void_v = is_same_v<remove_cv_t<Ty>, void>;
 	template <typename Ty>
-	struct is_void : bool_constant<is_void_aux<Ty>> {};
-	template< class T >
-	constexpr bool is_void_v = is_void<T>::value;
+	struct is_void : bool_constant<is_void_v<Ty>> {};
+
+	template <typename Ty>
+	constexpr bool is_null_pointer_v = is_same_v<remove_cv_t<Ty>, nullptr_t>;
+	template <typename Ty>
+	struct is_null_pointer : bool_constant<is_null_pointer_v<Ty>> {};
+
+	//array
+	template <typename Ty>
+	constexpr bool is_array_v = false;
+	template <typename Ty, size_t N>
+	constexpr bool is_array_v<Ty[N]> = true;
+	template <typename Ty>
+	constexpr bool is_array_v<Ty[]> = true;
+	template <typename Ty>
+	struct is_array : bool_constant<is_array_v<Ty>>{};
+
+	//enum0
+	template <typename Ty>
+	struct is_enum : bool_constant< __is_enum(Ty)> {};
 };
 
 #endif // !_MYTYPETRAITS_H_

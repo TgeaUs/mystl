@@ -4,7 +4,7 @@
 #include <memory>
 #include <type_traits>
 #include "my_type_traits.h"
-
+#include <sstream>
 struct obj
 {
 	obj* next;
@@ -34,7 +34,7 @@ void remove_cvv(volatile _Ty& a)
 {
 	using typo = _Ty;
 	std::cout << typeid(_Ty).name();
-}
+
 int main()
 {
 	
@@ -51,9 +51,9 @@ int main()
 	std::cout << *c<<"\n";
 	std::cout << *d<<"\n";*/
 
+
 	
-	std::cout << MyType_traits::is_void_v<void>;
-	
+	std::cout << MyType_traits::is_enum< E>::value;
 	return 0;
 	
 }
