@@ -2,6 +2,8 @@
 #include "my_allocator.h"
 #include <list>
 #include <memory>
+#include <vector>
+#include <tuple>
 #include <type_traits>
 #include "my_type_traits.h"
 #include <sstream>
@@ -34,10 +36,14 @@ void remove_cvv(volatile _Ty& a)
 {
 	using typo = _Ty;
 	std::cout << typeid(_Ty).name();
+}
 
+enum E;
+union A;
+class C;
+int xxx;
 int main()
 {
-	
     /*int	*a =(int*)MyAllocator::__default_alloc_template::allocate(1);
 	int *b =(int*)MyAllocator::__default_alloc_template::allocate(1);
 	int *c =(int*)MyAllocator::__default_alloc_template::allocate(1);
@@ -53,7 +59,21 @@ int main()
 
 
 	
-	std::cout << MyType_traits::is_enum< E>::value;
+	std::tuple<std::vector<int>, std::list<int>> m{};
+
+	auto& ve = std::get<0>(m);
+
+	ve.push_back(1);
+
+	typedef decltype(m) trans;
+
+	std::tuple_element<1, decltype(m)>::type a;
+
+	auto ve1 = std::get<0>(m);
+
+	for (auto i : ve1)
+		std::cout << i;
+	std::cout << typeid(m).name();
 	return 0;
 	
 }

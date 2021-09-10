@@ -129,9 +129,31 @@ namespace MyType_traits
 	template <typename Ty>
 	struct is_array : bool_constant<is_array_v<Ty>>{};
 
-	//enum0
+	//is_enum
+	template <typename Ty>
+	constexpr bool is_enum_v = bool_constant<__is_enum(Ty)>::value;
 	template <typename Ty>
 	struct is_enum : bool_constant< __is_enum(Ty)> {};
+
+	//is_union
+	template <typename Ty>
+	constexpr bool is_union_v = bool_constant<__is_union(Ty)>::value;
+	template <typename Ty>
+	struct is_union : bool_constant< __is_union(Ty)> {};
+
+	//is_union
+	template <typename Ty>
+	constexpr bool is_class_v = bool_constant<__is_class(Ty)>::value;
+	template <typename Ty>
+	struct is_class : bool_constant< __is_class(Ty)> {};
+
+	//is_funtion
+	template <class _Ty>
+	struct _Is_function { // determine whether _Ty is a function
+		using _Bool_type = false_type; // NB: members are user-visible via _Weak_types
+	};
+	template <typename Ty>
+	constexpr bool is_function_v = _Is_function<Ty>::_Bool_type::value;
 };
 
 #endif // !_MYTYPETRAITS_H_
