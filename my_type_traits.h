@@ -154,6 +154,37 @@ namespace MyType_traits
 	};
 	template <typename Ty>
 	constexpr bool is_function_v = _Is_function<Ty>::_Bool_type::value;
+
+	//is_pointer
+	template <typename T>
+	constexpr bool is_pointer_v = false;
+
+	template <typename T>
+	constexpr bool is_pointer_v<T*> = true;
+
+	template <typename T>
+	constexpr bool is_pointer_v<T* const> = true;
+
+	template <typename T>
+	constexpr bool is_pointer_v<T* volatile> = true;
+
+	template <typename T>
+	constexpr bool is_pointer_v<T* const volatile> = true;
+
+	template <typename Ty>
+	struct is_pointer : bool_constant<is_pointer_v<Ty>> {};
+
+	//is_lvalue_reference
+	template <typename Ty>
+	constexpr bool is_lvalue_reference_v = false;
+
+	template <typename Ty>
+	constexpr bool is_lvalue_reference_v<Ty&> = true;
+
+	template <typename Ty>
+	struct is_lvalue_reference : bool_constant<is_lvalue_reference_v<Ty>> {};
+
+	
 };
 
 #endif // !_MYTYPETRAITS_H_
