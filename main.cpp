@@ -11,9 +11,10 @@
 class simpleClass
 {
 	char* m_buf;
-	int* m_count;
 
 public:
+	int* m_count;
+
 	simpleClass(size_t n = 1)
 	{
 		m_buf = new char[n];
@@ -40,11 +41,12 @@ public:
 		}
 	}
 };
+class a {};
 int main()
 {
 
-	std::cout << std::is_lvalue_reference_v<int&&>;
-	std::cout << MyType_traits::is_lvalue_reference_v<int&&>;
+	std::cout << std::is_object_v<int>;
+	std::cout << MyType_traits::is_object_v<simpleClass>;
 
 	return 0;
 	

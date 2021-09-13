@@ -183,8 +183,57 @@ namespace MyType_traits
 
 	template <typename Ty>
 	struct is_lvalue_reference : bool_constant<is_lvalue_reference_v<Ty>> {};
-
 	
+	//is_rvalue_reference
+	template <typename Ty>
+	constexpr bool is_rvalue_reference_v = false;
+
+	template <typename Ty>
+	constexpr bool is_rvalue_reference_v<Ty&&> = true;
+
+	template <typename Ty>
+	struct is_rvalue_reference : bool_constant<is_rvalue_reference_v<Ty>> {};
+	
+	//is_reference
+	template <class>
+	constexpr bool is_reference_v = false; // determine whether type argument is a reference
+
+	template <class _Ty>
+	constexpr bool is_reference_v<_Ty&> = true;
+
+	template <class _Ty>
+	constexpr bool is_reference_v<_Ty&&> = true;
+
+	template <class _Ty>
+	struct is_reference : bool_constant<is_reference_v<_Ty>> {};
+
+	//is_fundamental
+	template <typename Ty>
+	constexpr bool is_arithmetic_v = std::is_integral_v<Ty> || std::is_floating_point_v<Ty>;
+
+	template <class Ty>
+	constexpr bool is_fundamental_v = is_arithmetic_v<Ty> || is_void_v<Ty> || is_null_pointer_v<Ty>;
+
+	template <typename Ty>
+	struct is_fundamental : bool_constant<is_fundamental_v<Ty>> {};
+	
+	//is_arithmetic
+	template <typename Ty>
+	struct is_arithmetic : bool_constant<is_arithmetic_v<Ty>> {};
+
+	//is_scalar
+	template <typename Ty>
+	constexpr bool is_scalar_v = is_arithmetic_v<Ty> || is_enum_v<Ty> || is_pointer_v<Ty> || std::is_member_pointer_v<Ty> || is_null_pointer_v<Ty>;
+	
+	template <typename Ty>
+	struct is_scalar : bool_constant<is_scalar_v<Ty>> {};
+
+	//is_object
+	template <typename Ty>
+	constexpr bool is_object_v = !is_function_v<Ty> && !is_reference_v<Ty> && !is_void_v<Ty>;
+
+	template <typename Ty>
+	struct is_object : bool_constant<is_object_v<Ty>> {};
 };
 
 #endif // !_MYTYPETRAITS_H_
