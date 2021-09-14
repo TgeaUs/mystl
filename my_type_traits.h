@@ -2,6 +2,8 @@
 #ifndef _MYTYPETRAITS_H_
 #define _MYTYPETRAITS_H_
 #define __STL_TEMPLATE_NULL template<>
+
+
 namespace MyType_traits
 {
 	//这些都是标准库的源代码 叫做类型萃取 就是萃取你的基础类型是不是重要的 特别是指针
@@ -234,6 +236,41 @@ namespace MyType_traits
 
 	template <typename Ty>
 	struct is_object : bool_constant<is_object_v<Ty>> {};
+
+	//is_compound
+	template <typename Ty>
+	constexpr bool is_compound_v = !is_function_v<Ty>;
+
+	template <typename Ty>
+	struct is_compound : bool_constant<!is_compound_v<Ty>>{};
+
+	//is_const
+	template <typename Ty>
+	constexpr bool is_const_v = false;
+
+	template <typename Ty>
+	constexpr bool is_const_v<const Ty> = true;
+
+	template <typename Ty>
+	struct is_const : bool_constant<is_const_v<Ty>> {};
+
+	//is_volatile
+	template <typename Ty>
+	constexpr bool is_volatile_v = false;
+
+	template <typename Ty>
+	constexpr bool is_volatile_v<volatile Ty> = true;
+
+	template <typename Ty>
+	struct is_volatile : bool_constant<is_volatile_v<Ty>> {};
+
+	//is_trivial
+	template <typename _Ty>
+	constexpr bool is_trivial_v = __is_trivially_constructible(_Ty) && __is_trivially_copyable(_Ty);
+
+
+	template <typename Ty>
+	struct is_trivial : bool_constant<__is_trivially_constructible(Ty) && __is_trivially_copyable(Ty)> {};
 };
 
 #endif // !_MYTYPETRAITS_H_
