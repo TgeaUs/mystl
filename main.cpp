@@ -7,6 +7,8 @@
 #include <type_traits>
 #include "my_type_traits.h"
 #include <sstream>
+#include <unordered_map>
+#include <memory>
 
 class simpleClass
 {
@@ -42,12 +44,34 @@ public:
 	}
 };
 class a {};
-int main()
+struct func
 {
+	int& i;
+	func(int& i_) : i(i_) {}
+};
 
-	std::cout << std::is_object_v<int>;
-	std::cout << MyType_traits::is_object_v<simpleClass>;
-
-	return 0;
+void oops()
+{
+	int some_local_state = 0;
+	func my_func(some_local_state);
+	some_local_state = 2;
 	
+}                              
+
+
+template <typename T>
+void sumasb(T a,  typename std::enable_if<std::is_integral<T>::value>::type*  = nullptr)
+{
+	std::cout << "int";
+}
+
+template <typename T>
+void sumasb(T a, typename std::enable_if<std::is_floating_point<T>::value>::type* = nullptr)
+{
+	std::cout << "float";
+}
+int main() {
+	char i = '9';
+	char b = '8';
+	std::cout << i - b;
 }

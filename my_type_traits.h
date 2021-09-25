@@ -268,9 +268,44 @@ namespace MyType_traits
 	template <typename _Ty>
 	constexpr bool is_trivial_v = __is_trivially_constructible(_Ty) && __is_trivially_copyable(_Ty);
 
-
 	template <typename Ty>
 	struct is_trivial : bool_constant<__is_trivially_constructible(Ty) && __is_trivially_copyable(Ty)> {};
+
+	//is_trivially_copyable
+	template <typename Ty>
+	constexpr bool is_trivially_copyable_v = bool_constant<__is_trivially_copyable(Ty)>::value;
+	template <typename Ty>
+	struct is_trivially_copyable : public bool_constant<__is_trivially_copyable(Ty)> {};
+
+	//is_empty
+	template <typename Ty>
+	constexpr bool is_empty_v = bool_constant<__is_empty(Ty)>::value;
+	template <typename Ty>
+	struct is_empty : public bool_constant<__is_empty(Ty)> {};
+
+	//is_polymorphic
+	template <typename Ty>
+	constexpr bool is_polymorphic_v = bool_constant<__is_polymorphic(Ty)>::value;
+	template <typename Ty>
+	struct is_polymorphic : public bool_constant<__is_polymorphic(Ty)> {};
+
+
+
+
+
+
+
+
+	//‘”œÓ±‰ªª https://zh.cppreference.com/w/cpp/header/type_traits
+	//enable_if
+	template <bool Test, typename Ty = void>
+	struct enable_if {};
+
+	template <typename Ty>
+	struct enable_if<true, Ty>
+	{
+		using type = Ty;
+	};
 };
 
 #endif // !_MYTYPETRAITS_H_
