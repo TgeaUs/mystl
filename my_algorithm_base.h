@@ -233,5 +233,7 @@ namespace MyAlgorithm_base
 	{
 		return __lower_bound(__first, __last, __val,MyIterator_traits::__distance_type(__first));
 	}
+
+
 }
 #endif // !_MYALGORITHMBASE_H_

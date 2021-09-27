@@ -5,73 +5,108 @@
 #include <vector>
 #include <tuple>
 #include <type_traits>
+#include <utility>
+#include "my_utility.h"
 #include "my_type_traits.h"
 #include <sstream>
 #include <unordered_map>
-#include <memory>
+#include "my_shared_ptr.h"
 
-class simpleClass
+struct Algin
 {
-	char* m_buf;
-
-public:
-	int* m_count;
-
-	simpleClass(size_t n = 1)
-	{
-		m_buf = new char[n];
-		m_count = new int();
-		*m_count = 1;
-		std::cout << "Ctor" << "\n";
-	}
-	simpleClass(const simpleClass& T)
-	{
-		m_buf = T.m_buf;
-		m_count = T.m_count;
-
-		(*m_count)++;
-		std::cout << "C:" << m_count << "\n";
-	}
-	~simpleClass()
-	{
-		(*m_count)--;
-		if (*m_count == 0)
-		{
-			std::cout << "Dctor" << "\n";
-			delete []m_buf;
-			delete m_count;
-		}
-	}
-};
-class a {};
-struct func
-{
-	int& i;
-	func(int& i_) : i(i_) {}
-};
-
-void oops()
-{
-	int some_local_state = 0;
-	func my_func(some_local_state);
-	some_local_state = 2;
+	char a; //1
+	short b; //2
+	int c; //4
+	double d; //8
 	
-}                              
+	
+};
 
-
-template <typename T>
-void sumasb(T a,  typename std::enable_if<std::is_integral<T>::value>::type*  = nullptr)
+template <typename Ty>
+void sum(Ty[])
 {
-	std::cout << "int";
+	std::cout << "233";
 }
 
-template <typename T>
-void sumasb(T a, typename std::enable_if<std::is_floating_point<T>::value>::type* = nullptr)
+
+template <typename Ty, size_t N>
+void sum(Ty[N])
 {
-	std::cout << "float";
+	std::cout << "1111";
 }
-int main() {
-	char i = '9';
-	char b = '8';
-	std::cout << i - b;
+
+class Test
+{
+public:
+	virtual ~Test()
+	{
+		std::cout << "D" << "\n";
+	}
+	Test()
+	{
+		std::cout << "C" << "\n";
+	}
+	std::shared_ptr<Test> getObj()
+	{
+		std::shared_ptr<Test> temp(this);
+		return temp;
+	}
+
+	virtual void print()
+	{
+		std::cout << "printA";
+	}
+
+};
+
+class Driver : public Test
+{
+public:
+	~Driver()
+	{
+		std::cout << "DriverD" << "\n";
+	}
+	Driver()
+	{
+		std::cout << "DriverC" << "\n";
+	}
+	void print() override
+	{
+		std::cout << "driver" << "\n";
+	}
+};
+using namespace std;
+#include <functional>
+class A
+{
+public:
+	using pf = int(*)(int) ;
+	static std::function<void(int*)> b;
+};
+
+void sum( void(A::* function)(int) )
+{
+
+}
+int main()
+{
+	sum(A::b);
+
+
+	//ty::shared_ptr<Test> myb(new Driver());
+	//myb->print();
+	//(*myb).print();
+	//ty::shared_ptr<Test> myc(new Driver());
+	//myc = myb;
+	//std::cout <<"计数器"<< myb.use_count() <<"\n";
+
+
+	//std::shared_ptr<Test> stdb(new Driver());
+	//stdb->print();
+	//(*stdb).print();
+	//std::shared_ptr<Test> stdc = stdb;
+	//std::cout << "计数器" << stdb.use_count()<<"\n";
+
+	
+
 }
