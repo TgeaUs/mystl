@@ -72,7 +72,7 @@ public:
 	}
 	void print() override
 	{
-		std::cout << "driver" << "\n";
+		std::cout << "我打印了printf" << "\n";
 	}
 };
 using namespace std;
@@ -88,25 +88,52 @@ void sum( void(A::* function)(int) )
 {
 
 }
+template <size_t size>
+class xxx
+{
+	double a;
+	int b;
+public:
+	xxx()
+	{
+		std::cout << "C";
+	}
+	template <size_t osize>
+	xxx& operator=(const xxx<osize>& other)
+	{
+		std::cout << size;
+		std::cout << osize;
+		return *this;
+	}
+	xxx<15> aaaaa(xxx<15> b)
+	{
+		return b;
+	}
+};
+
+void alg(std::input_iterator_tag)
+{
+	std::cout << "input_iterator_tag";
+}
+
 int main()
 {
-	sum(A::b);
-
-
 	//ty::shared_ptr<Test> myb(new Driver());
-	//myb->print();
-	//(*myb).print();
-	//ty::shared_ptr<Test> myc(new Driver());
-	//myc = myb;
-	//std::cout <<"计数器"<< myb.use_count() <<"\n";
+	//ty::shared_ptr<Test> myc = myb;
 
+	//std::cout <<"计数器"<< myb.use_count() <<"\n";
+	//std::cout << "\n" << "\n" << "\n";
 
 	//std::shared_ptr<Test> stdb(new Driver());
-	//stdb->print();
-	//(*stdb).print();
 	//std::shared_ptr<Test> stdc = stdb;
 	//std::cout << "计数器" << stdb.use_count()<<"\n";
 
 	
+	std::vector<int> vc{ 1,2,3,4 };
 
+	auto it = (MyAlgorithm_base::find_if(vc.begin(), vc.end(), [](int a) { return a == 3; }));
+
+	*it = 4;
+	for (auto i : vc)
+		std::cout << i;
 }

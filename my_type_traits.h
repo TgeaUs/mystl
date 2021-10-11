@@ -244,6 +244,11 @@ namespace MyType_traits
 	template <typename Ty>
 	struct is_compound : bool_constant<!is_compound_v<Ty>>{};
 
+	//is_member_pointer
+	  
+
+	//类型的性质
+
 	//is_const
 	template <typename Ty>
 	constexpr bool is_const_v = false;

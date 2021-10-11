@@ -234,6 +234,31 @@ namespace MyAlgorithm_base
 		return __lower_bound(__first, __last, __val,MyIterator_traits::__distance_type(__first));
 	}
 
+	//find
+	template <typename InputIt, typename T>
+	InputIt find(InputIt first, InputIt last, const T& value)
+	{
+		for (; first != last; ++first)
+		{
+			if ((*first) == value)
+			{
+				return first;
+			}
+		}
+		return last;
+	}
 
+	template <typename InputIt, typename UnaryPredicate>
+	InputIt find_if(InputIt first, InputIt last, UnaryPredicate p)
+	{
+		for (; first != last; ++first)
+		{
+			if (p(*first))
+			{
+				return first;
+			}
+		}
+		return last;
+	}
 }
 #endif // !_MYALGORITHMBASE_H_

@@ -13,6 +13,7 @@ namespace ty
 		typedef char type_must_be_complete[sizeof(T) ? 1 : -1];
 		(void)sizeof(type_must_be_complete);
 		delete x;
+		std::cout << "我调用了删除器"<<typeid(x).name() <<"\n";
 	}
 
 	template<class T> inline void checked_array_delete(T* x)
