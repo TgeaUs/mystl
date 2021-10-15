@@ -48,7 +48,6 @@ namespace ty
 		void weak_release() // nothrow
 		{
 			long new_weak_count;
-
 			{
 				new_weak_count = --weak_count_;
 			}
@@ -67,10 +66,7 @@ namespace ty
 		P ptr; // copy constructor must not throw
 		D del; // copy constructor must not throw
 	public:
-		sp_counted_base_impl(P p, D d) : ptr(p), del(d)
-		{
-
-		}
+		sp_counted_base_impl(P p, D d) : ptr(p), del(d){}
 		virtual void dispose()
 		{
 			del(ptr);
@@ -82,6 +78,7 @@ namespace ty
 	{
 		sp_counted_base* pi_;
 	public:
+		shared_count() : pi_(0) {}
 		template<class P, class D> 
 		shared_count(P p, D d) : pi_(0)
 		{
@@ -113,6 +110,14 @@ namespace ty
 				pi_->release();
 			pi_ = temp;
 			return *this;
+		}
+
+
+		void swap(shared_count& r) // nothrow
+		{
+			sp_counted_base* tmp = r.pi_;
+			r.pi_ = pi_;
+			pi_ = tmp;
 		}
 	
 	};

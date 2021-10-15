@@ -9,9 +9,12 @@
 #include "my_utility.h"
 #include "my_type_traits.h"
 #include <sstream>
+#include <unordered_set>
 #include <unordered_map>
+#include <algorithm>
 #include "my_shared_ptr.h"
-
+#include <ranges>
+#include "safe_stack.h"
 struct Algin
 {
 	char a; //1
@@ -40,11 +43,11 @@ class Test
 public:
 	virtual ~Test()
 	{
-		std::cout << "D" << "\n";
+		std::cout << "D1" << "\n";
 	}
 	Test()
 	{
-		std::cout << "C" << "\n";
+		std::cout << "C1" << "\n";
 	}
 	std::shared_ptr<Test> getObj()
 	{
@@ -54,7 +57,30 @@ public:
 
 	virtual void print()
 	{
-		std::cout << "printA";
+		std::cout << "print Test\n";
+	}
+
+};
+class Test2
+{
+public:
+	virtual ~Test2()
+	{
+		std::cout << "D2" << "\n";
+	}
+	Test2()
+	{
+		std::cout << "C2" << "\n";
+	}
+	std::shared_ptr<Test2> getObj()
+	{
+		std::shared_ptr<Test2> temp(this);
+		return temp;
+	}
+
+	virtual void print()
+	{
+		std::cout << "print Test2\n";
 	}
 
 };
@@ -115,25 +141,13 @@ void alg(std::input_iterator_tag)
 {
 	std::cout << "input_iterator_tag";
 }
-
 int main()
 {
-	//ty::shared_ptr<Test> myb(new Driver());
-	//ty::shared_ptr<Test> myc = myb;
-
-	//std::cout <<"计数器"<< myb.use_count() <<"\n";
-	//std::cout << "\n" << "\n" << "\n";
-
-	//std::shared_ptr<Test> stdb(new Driver());
-	//std::shared_ptr<Test> stdc = stdb;
-	//std::cout << "计数器" << stdb.use_count()<<"\n";
-
 	
-	std::vector<int> vc{ 1,2,3,4 };
 
-	auto it = (MyAlgorithm_base::find_if(vc.begin(), vc.end(), [](int a) { return a == 3; }));
+	std::string a = "233";
 
-	*it = 4;
-	for (auto i : vc)
-		std::cout << i;
+	std::cout << a.substr(2, 2);
+	
+
 }

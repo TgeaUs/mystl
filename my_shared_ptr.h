@@ -82,14 +82,16 @@ namespace ty
 	{
 		using reference = T&;
 	};
+
 	template <typename T>
 	class shared_ptr
 	{
 		T* px;
 		shared_count pn;
+		typedef shared_ptr<T> this_type;
 		typedef typename shared_ptr_traits<T>::reference this_reference;
 	public:
-		shared_ptr() :px(std::nullptr_t), pn() {}
+		shared_ptr() :px(0), pn() {}
 
 
 		template<class Y>
@@ -128,6 +130,20 @@ namespace ty
 			return *this;
 		}
 
+		void reset()
+		{
+			this_type().swap(*this);
+		}
+		template <class Y>
+		void reset(Y* p)
+		{
+			this_type(p).swap(*this);
+		}
+		void swap(shared_ptr<T>& other)
+		{
+			std::swap(px, other.px);
+			pn.swap(other.pn);
+		}
 	};
 }
 #endif // ! MY_SHARED_PTR_H

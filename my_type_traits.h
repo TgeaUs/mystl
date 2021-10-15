@@ -311,6 +311,16 @@ namespace MyType_traits
 	{
 		using type = Ty;
 	};
+	//dacay
+	template <typename _Ty>
+	struct decay
+	{
+		using _Ty1 = std::remove_reference_t<_Ty>;
+		using _Ty2 = typename std::_Select<_STD is_function_v<_Ty1>>::template _Apply<std::add_pointer<_Ty1>, _STD remove_cv<_Ty1>>;
+		using type = typename std::_Select<_STD is_array_v<_Ty1>>::template _Apply<std::add_pointer<_STD remove_extent_t<_Ty1>>, _Ty2>::type;
+
+
+	};
 };
 
 #endif // !_MYTYPETRAITS_H_

@@ -2,6 +2,10 @@
 #ifndef _MYALGORITHMBASE_H_
 #define _MYALGORITHMBASE_H_
 #include <algorithm>
+#include <type_traits>
+//标准库对于random_access_iterator_tag 和 无法random_access_iterator_tag的算法有做专门的优化
+//但这里只做学习用途 所以一律遍历 不考虑效率
+
 namespace MyAlgorithm_base
 {
 
@@ -234,7 +238,8 @@ namespace MyAlgorithm_base
 		return __lower_bound(__first, __last, __val,MyIterator_traits::__distance_type(__first));
 	}
 
-	//find
+	//不修改序列的操作
+	//find 算法 不做random_access_iterator_tag优化
 	template <typename InputIt, typename T>
 	InputIt find(InputIt first, InputIt last, const T& value)
 	{
@@ -259,6 +264,103 @@ namespace MyAlgorithm_base
 			}
 		}
 		return last;
+	}
+
+	template <typename InputIt, typename UnaryPredicate>
+	InputIt find_if_not(InputIt first, InputIt last, UnaryPredicate p)
+	{
+		for (; first != last; ++first)
+		{
+			if (!p(*first))
+			{
+				return first;
+			}
+		}
+		return last;
+	}
+
+	//for_each
+	template<class InputIt, class UnaryFunction>
+	UnaryFunction for_each(InputIt first, InputIt last, UnaryFunction p)
+	{
+		for (; first != last; ++first)
+		{
+			p(*first);
+		}
+		return p;
+	}
+	template< class InputIt, class Size, class UnaryFunction>
+	InputIt for_each_n(InputIt first, Size n, UnaryFunction p)
+	{
+		for (; n > 0; --n, ++first)
+		{
+			p(*first);
+		}
+		return first;
+	}
+
+	//count
+	template< class InputIt, class T >
+	typename std::iterator_traits<InputIt>::difference_type count(InputIt first, InputIt last, const T& value)
+	{
+		typename std::iterator_traits<InputIt>::difference_type ret = 0;
+		for (; first != last; ++first)
+		{
+			if (*first == value)
+				++ret;
+		}
+		return ret;
+	}
+	
+	//mismatch
+	template<class InputIt1, class InputIt2>
+	std::pair<InputIt1, InputIt2> mismatch(InputIt1 first1, InputIt1 last1, InputIt2 first2)
+	{
+		while (first1 != last1 && *first1 == *first2) {
+			++first1, ++first2;
+		}
+		return std::make_pair(first1, first2);
+	}
+
+	//search
+	template< class ForwardIt1, class ForwardIt2 >
+	ForwardIt1 search(ForwardIt1 first, ForwardIt1 last, ForwardIt2 s_first, ForwardIt2 s_last)
+	{
+		for (; ; ++first) {
+			ForwardIt1 it = first;
+			for (ForwardIt2 s_it = s_first; ; ++it, ++s_it) {
+				if (s_it == s_last) {
+					return first;
+				}
+				if (it == last) {
+					return last;
+				}
+				if (!(*it == *s_it)) {
+					break;
+				}
+			}
+		}
+	}
+	//find_end
+	template<class ForwardIt1, class ForwardIt2>
+	ForwardIt1 find_end(ForwardIt1 first, ForwardIt1 last, ForwardIt2 s_first, ForwardIt2 s_last)
+	{
+		if (s_first == s_last)
+			return last;
+		ForwardIt1 result = last;
+		while (true)
+		{
+			ForwardIt1 new_result = MyAlgorithm_base::search(first, last, s_first, s_last);
+			if (new_result == last)
+				break;
+			else
+			{
+				result = new_result;
+				first = result;
+				++first;
+			}
+		}
+		return result;
 	}
 }
 #endif // !_MYALGORITHMBASE_H_
